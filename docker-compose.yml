@@ -1,0 +1,51 @@
+version: "3.3"
+
+networks:
+  frontend:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+services:
+    kmaster1:
+        image: pranay/ubuntu-sysd:2.0
+        container_name: kmaster1
+        hostname: kmaster1
+        privileged: true
+        networks:
+            frontend:
+                ipv4_address: 172.20.0.5
+        ports:
+            - "5432:22"
+            - "9099:9092"
+            - "5077:5044"
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup:ro 
+        deploy:
+          resources:
+            limits:
+              cpus: '2.0'
+              memory: 4000M
+        #command: ["systemctl","restart","ssh"]      
+
+
+    kmaster2:
+        image: pranay/ubuntu-sysd:2.0
+        container_name: kmaster2
+        hostname: kmaster2
+        privileged: true
+        networks:
+            frontend:
+                ipv4_address: 172.20.0.6
+        ports:
+            - "5433:22"
+            - "9098:9092"
+            - "5078:5044"  
+        volumes:
+            - /sys/fs/cgroup:/sys/fs/cgroup:ro 
+        deploy:
+          resources:
+            limits:
+              cpus: '2.0'
+              memory: 4000M                
+
+ 
